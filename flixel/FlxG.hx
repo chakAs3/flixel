@@ -295,7 +295,6 @@ class FlxG
 	/**
 	 * Switch from the current game state to the one specified here.
 	 */
-	
 	public static inline function switchState(State:FlxState):Void
 	{
 		//If a transition is required
@@ -540,8 +539,6 @@ class FlxG
 		#if !FLX_NO_SOUND_SYSTEM
 		sound = new SoundFrontEnd();
 		#end
-		
-		FlxAssets.init();
 	}
 	
 	/**

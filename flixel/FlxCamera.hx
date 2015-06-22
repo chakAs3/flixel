@@ -159,10 +159,11 @@ class FlxCamera extends FlxBasic
 
 	/**
 	 * Whether the positions of the objects rendered on this camera are rounded.
-	 * Default is true. If set on individual objects, they ignore the global camera setting.
+	 * If set on individual objects, they ignore the global camera setting.
+	 * Defaults to false with FLX_RENDER_TILE and to true with FLX_RENDER_BLIT.
 	 * WARNING: setting this to false on blitting targets is very expensive.
 	 */
-	public var pixelPerfectRender:Bool = true;
+	public var pixelPerfectRender:Bool = #if FLX_RENDER_TILE false #else true #end;
 	
 	/**
 	 * How wide the camera display is, in game pixels.
@@ -1028,12 +1029,13 @@ class FlxCamera extends FlxBasic
 	 * @param	Offset	Offset the follow deadzone by a certain amount. Only applicable for PLATFORMER and LOCKON styles.
 	 * @param	Lerp	How much lag the camera should have (can help smooth out the camera movement).
 	 */
-	public function follow(Target:FlxObject, ?Style:FlxCameraFollowStyle, ?Offset:FlxPoint, Lerp:Float = 1):Void
+	public function follow(Target:FlxObject, ?Style:FlxCameraFollowStyle, ?Offset:FlxPoint, ?Lerp:Float):Void
 	{
 		if (Style == null)
-		{
 			Style = LOCKON;
-		}
+
+		if (Lerp == null)
+			Lerp = 60 / FlxG.updateFramerate;
 		
 		style = Style;
 		target = Target;
@@ -1117,7 +1119,7 @@ class FlxCamera extends FlxBasic
 		_fxFlashColor = Color;
 		if (Duration <= 0)
 		{
-			Duration = FlxMath.MIN_VALUE_FLOAT;
+			Duration = 0.000001;
 		}
 		_fxFlashDuration = Duration;
 		_fxFlashComplete = OnComplete;
@@ -1142,21 +1144,14 @@ class FlxCamera extends FlxBasic
 		_fxFadeColor = Color;
 		if (Duration <= 0)
 		{
-			Duration = FlxMath.MIN_VALUE_FLOAT;
+			Duration = 0.000001;
 		}
 		
 		_fxFadeIn = FadeIn;
 		_fxFadeDuration = Duration;
 		_fxFadeComplete = OnComplete;
 		
-		if (_fxFadeIn)
-		{
-			_fxFadeAlpha = 0.999999;
-		}
-		else
-		{
-			_fxFadeAlpha = FlxMath.MIN_VALUE_FLOAT;
-		}
+		_fxFadeAlpha = _fxFadeIn ? 0.999999 : 0.000001;
 	}
 	
 	/**

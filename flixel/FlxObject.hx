@@ -342,9 +342,10 @@ class FlxObject extends FlxBasic
 	@:isVar
 	public var height(get, set):Float;
 	/**
-	 * Whether or not the coordinates should be rounded during draw(), true by default (recommended for pixel art). 
-	 * Only affects tilesheet rendering and rendering using BitmapData.draw() in blitting.
-	 * (copyPixels() only renders on whole pixels by nature). Causes draw() to be used if false, which is more expensive.
+	 * Whether or not the coordinates should be rounded during rendering. 
+	 * Does not affect copyPixels(), which can only render on whole pixels.
+	 * Defaults to the camera's global pixelPerfectRender value,
+	 * but overrides that value if not equal to null.
 	 */
 	public var pixelPerfectRender(default, set):Null<Bool>;
 	/**
@@ -854,6 +855,19 @@ class FlxObject extends FlxBasic
 	{
 		x = X;
 		y = Y;
+	}
+	
+	/**
+	 * Helper function to set the coordinates of this object 
+	 * using the center instead of the top-left corner.
+	 * 
+	 * @param	X	The new x position of the center
+	 * @param	Y	The new y position of the center
+	 */	
+	public function setPositionUsingCenter(X:Float = 0, Y:Float = 0):Void
+	{
+		x = X - width / 2;
+		y = Y - height / 2;
 	}
 	
 	/**
