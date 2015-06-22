@@ -163,7 +163,7 @@ class FlxSpriteTest extends FlxTest
 		assert1x1GraphicLoaded();
 	}
 	
-	@Test // issue 1377
+	@Test // #1377
 	function testUpdateHitboxNegativeScale()
 	{
 		sprite1.makeGraphic(10, 5);
@@ -182,22 +182,35 @@ class FlxSpriteTest extends FlxTest
 		Assert.areEqual(1, sprite1.frameHeight);
 	}
 	
-	@Test // issue 1203
+	@Test // #1203
 	function testColorWithAlphaComparison()
 	{
 		sprite1.color = FlxColor.RED;
 		Assert.areEqual(FlxColor.RED, sprite1.color);
 	}
 	
-	@Test // issue 1511
+	@Test // #1511
 	function testLoadGraphicInvalidGraphicPathNoCrash()
 	{
 		sprite1.loadGraphic("assets/invalid");
 	}
 	
-	@Test // issue 1511
+	@Test // #1511
 	function testLoadRotatedGraphicInvalidGraphicPathNoCrash()
 	{
 		sprite1.loadRotatedGraphic("assets/invalid");
+	}
+	
+	@Test // #1526
+	function testCreateSpriteSkipPosition()
+	{
+		var sprite = new FlxSprite(new BitmapData(10, 20));
+		
+		Assert.areEqual(0, sprite.x);
+		Assert.areEqual(0, sprite.y);
+		
+		Assert.isNotNull(sprite.pixels);
+		Assert.areEqual(10, sprite.pixels.width);
+		Assert.areEqual(20, sprite.pixels.height);
 	}
 }

@@ -8,23 +8,20 @@ class FlxInputMappingManager {
 
 	private static var inputListingObjectActionMap:Map<FlxBasic,Map<FlxInputAction,FlxInputMapping>> = new Map<FlxBasic,Map<FlxInputAction,FlxInputMapping>>() ;
 
-	private static var root:FlxBasic = new FlxBasic();
+	private static var _default:FlxBasic = new FlxBasic();
 	public function new() {
 		//inputActionMap = new Map();
     }
     public static function addKeysAction(inputAction:FlxInputAction,KeyList:Array<FlxKey>,listingObjects:Array<FlxBasic>=null):Void
 	{
 
-		if(listingObjects == null)
-			listingObjects = [root] ;
+		if(listingObjects == null)  listingObjects = [_default] ;  // if not specific lister add default
 
 
+		for (listingObject in listingObjects ){
 
 
-		for (listingObject in listingObjects){
-
-
-		var _inputActionMap =	(inputListingObjectActionMap.get(listingObject)==null ? new Map<FlxInputAction,FlxInputMapping>():inputListingObjectActionMap.get(listingObject)) ;
+		var _inputActionMap =	(inputListingObjectActionMap.get(listingObject) 	== null ? new Map<FlxInputAction,FlxInputMapping>() : inputListingObjectActionMap.get(listingObject)) ;
 
 
 				var _inputMapping:FlxInputMapping = (_inputActionMap.get(inputAction)!=null ? _inputActionMap.get(inputAction) : new FlxInputMapping());
@@ -32,7 +29,6 @@ class FlxInputMappingManager {
 				_inputMapping.keys = KeyList ;
 
 				_inputActionMap.set(inputAction,_inputMapping);
-
 
 
 				inputListingObjectActionMap.set(listingObject,_inputActionMap);
@@ -61,7 +57,7 @@ class FlxInputMappingManager {
 	{
 
         if(listingObject == null )
-			listingObject = root ;
+			listingObject = _default ;
 		var _inputActionMap = null;
 		if(listingObject != null ) _inputActionMap =	inputListingObjectActionMap.get(listingObject) ;
         var input:FlxInputMapping = (_inputActionMap == null || _inputActionMap .get(inputAction) == null ) ? new FlxInputMapping():   _inputActionMap .get(inputAction) ;

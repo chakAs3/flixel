@@ -20,10 +20,14 @@ class RunTravis
 {
 	public static function main():Void
 	{
-		var target:Target = Sys.getEnv("TARGET");
+		var target:Target = Sys.args()[0];
+		if (target == null)
+			target = Target.FLASH;
+		
 		Sys.exit(getResult([
 			runUnitTests(target),
-			runCoverageTests(target),
+			buildCoverageTests(target),
+			buildSwfVersionTests(target),
 			buildDemos(target)
 		]));
 	}
@@ -45,12 +49,12 @@ class RunTravis
 		else return runOpenFL("test", "unit", target);
 	}
 	
-	static function runCoverageTests(target:Target):ExitCode
+	static function buildCoverageTests(target:Target):ExitCode
 	{
-		Sys.println("\nRunning coverage tests...\n");
+		Sys.println("\nBuilding coverage tests...\n");
 		return getResult([
-			runOpenFL("build", "coverage", target, "coverage1"),
-			runOpenFL("build", "coverage", target, "coverage2")
+			build("coverage", target, "coverage1"),
+			build("coverage", target, "coverage2")
 		]);
 	}
 	
@@ -61,6 +65,24 @@ class RunTravis
 		if (target == Target.CPP)
 			demos = ["Mode", "RPG Interface", "FlxNape"];
 		return haxelibRun(["flixel-tools", "td", target].concat(demos));
+	}
+	
+	static function buildSwfVersionTests(target:Target):ExitCode
+	{
+		if (target == Target.FLASH)
+		{
+			Sys.println("\nBuilding swf version tests...\n");
+			return getResult([
+				build("swfVersion/11", target),
+				build("swfVersion/11_2", target)
+			]);
+		}
+		else return ExitCode.SUCCESS;
+	}
+	
+	static function build(path:String, target:Target, ?define:String):ExitCode
+	{
+		return runOpenFL("build", path, target, define);
 	}
 	
 	static function runOpenFL(operation:String, path:String, target:Target, ?define:String):ExitCode

@@ -3,7 +3,6 @@ import flixel.system.macros.EnumBuildingMacro;
 import flixel.system.macros.EnumBuildingMacro;
 import flixel.system.macros.FlxMacroUtil;
 @:enum
-@:build(flixel.system.macros.EnumBuildingMacro.build())
 abstract FlxInputAction(String) from String to String {
 
 
